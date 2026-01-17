@@ -15,5 +15,11 @@ class GameUser extends Model
     public function clubs() {
         return $this->hasMany(UserClub::class, 'UserID');
     }
+
+    protected $fillable = [
+        'Username',
+        'Email',
+        'PasswordHash'
+    ];
 }
 
