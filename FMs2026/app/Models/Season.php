@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Season extends Model
 {
@@ -10,12 +12,31 @@ class Season extends Model
     protected $primaryKey = 'SeasonID';
     public $timestamps = false;
 
-    public function tournament() {
+    protected $fillable = [
+        'TournamentID',
+        'StartDate',
+        'EndDate',
+    ];
+
+    protected $casts = [
+        'StartDate' => 'date',
+        'EndDate' => 'date',
+    ];
+
+    public function tournament(): BelongsTo
+    {
         return $this->belongsTo(Tournament::class, 'TournamentID');
     }
 
-    public function matches() {
+    public function userClubs(): HasMany
+    {
+        return $this->hasMany(UserClub::class, 'SeasonID');
+    }
+
+    public function matches(): HasMany
+    {
         return $this->hasMany(MatchGame::class, 'SeasonID');
     }
 }
+
 

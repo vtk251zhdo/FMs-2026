@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MatchGame extends Model
 {
@@ -10,20 +12,55 @@ class MatchGame extends Model
     protected $primaryKey = 'MatchID';
     public $timestamps = false;
 
-    public function homeClub() {
+    protected $fillable = [
+        'SeasonID',
+        'HomeClubID',
+        'AwayClubID',
+        'MatchDate',
+        'Stadium',
+        'ScoreHome',
+        'ScoreAway',
+    ];
+
+    protected $casts = [
+        'MatchDate' => 'date',
+    ];
+
+    public function homeClub(): BelongsTo
+    {
         return $this->belongsTo(Club::class, 'HomeClubID');
     }
 
-    public function awayClub() {
+    public function awayClub(): BelongsTo
+    {
         return $this->belongsTo(Club::class, 'AwayClubID');
     }
 
-    public function season() {
+    public function season(): BelongsTo
+    {
         return $this->belongsTo(Season::class, 'SeasonID');
     }
 
-    public function stats() {
+    public function stats(): HasMany
+    {
         return $this->hasMany(MatchStat::class, 'MatchID');
     }
+
+    public function getResult()
+    {
+        if ($this->ScoreHome > $this->ScoreAway) {
+            return 'HomeWin';
+        } elseif ($this->ScoreAway > $this->ScoreHome) {
+            return 'AwayWin';
+        }
+        return 'Draw';
+    }
+
+    public function getResultText()
+    {
+        return "{$this->ScoreHome}:{$this->ScoreAway}";
+    }
 }
+
+
 
