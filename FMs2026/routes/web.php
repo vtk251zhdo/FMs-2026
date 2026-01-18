@@ -8,11 +8,13 @@ use App\Http\Controllers\ClubController;
 use App\Http\Controllers\MatchController;
 use App\Http\Controllers\TransferController;
 use App\Http\Controllers\FinanceController;
+use App\Http\Controllers\LocalizationController;
 
 use App\Models\Season;
 use App\Models\Club;
 use App\Models\UserClub;
 use App\Models\Tournament;
+use App\Models\MatchGame;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +38,16 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 /*
 |--------------------------------------------------------------------------
+| Localization
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['web'])->group(function () {
+    Route::post('/set-language/{language}', [LocalizationController::class, 'setLanguage'])->name('set-language');
+    Route::get('/get-language', [LocalizationController::class, 'getLanguage'])->name('get-language');
+});
+
+/*
+|--------------------------------------------------------------------------
 | Start Game / Career
 |--------------------------------------------------------------------------
 */
@@ -47,7 +59,7 @@ Route::get('/start-game', function () {
 
     // Якщо вже є активна карʼєра (Season без EndDate)
     $activeCareer = UserClub::where('UserID', session('user_id'))
-        ->whereHas('season', fn ($q) => $q->where('EndDate', '>', now()))
+        ->whereHas('season', fn($q) => $q->where('EndDate', '>', now()))
         ->first();
 
     if ($activeCareer) {
@@ -105,14 +117,19 @@ Route::get('/dashboard', function () {
 
     $career = UserClub::with(['club', 'season'])
         ->where('UserID', session('user_id'))
-        ->whereHas('season', fn ($q) => $q->where('EndDate', '>', now()))
         ->first();
 
     if (!$career) {
         return redirect()->route('start-game');
     }
 
-    return view('dashboard', compact('career'));
+    // Get upcoming matches
+    $upcomingMatches = MatchGame::with(['homeClub', 'awayClub'])
+        ->orderBy('MatchDate', 'asc')
+        ->limit(1)
+        ->get();
+
+    return view('dashboard', compact('career', 'upcomingMatches'));
 })->name('dashboard');
 
 /*

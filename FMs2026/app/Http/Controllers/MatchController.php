@@ -9,9 +9,6 @@ use App\Models\Club;
 
 class MatchController extends Controller
 {
-    /**
-     * Show upcoming matches
-     */
     public function fixtures()
     {
         $userClub = UserClub::with(['club', 'season'])->first();
@@ -24,7 +21,7 @@ class MatchController extends Controller
 
         $upcomingMatches = MatchGame::where('SeasonID', $season->SeasonID)
             ->with(['homeClub', 'awayClub'])
-            ->whereNull('ScoreHome')
+            ->where('Status', '!=', 'Finished')
             ->orderBy('MatchDate', 'asc')
             ->get();
 
@@ -34,9 +31,6 @@ class MatchController extends Controller
         ]);
     }
 
-    /**
-     * Show completed matches
-     */
     public function results()
     {
         $userClub = UserClub::with(['club', 'season'])->first();
@@ -49,7 +43,7 @@ class MatchController extends Controller
 
         $results = MatchGame::where('SeasonID', $season->SeasonID)
             ->with(['homeClub', 'awayClub'])
-            ->whereNotNull('ScoreHome')
+            ->where('Status', '=', 'Finished')
             ->orderBy('MatchDate', 'desc')
             ->get();
 
@@ -58,9 +52,6 @@ class MatchController extends Controller
         ]);
     }
 
-    /**
-     * Show match details with statistics
-     */
     public function detail($id)
     {
         $match = MatchGame::with(['homeClub', 'awayClub', 'stats.player'])->findOrFail($id);
@@ -72,9 +63,6 @@ class MatchController extends Controller
         ]);
     }
 
-    /**
-     * Get league table
-     */
     public function leagueTable()
     {
         $userClub = UserClub::with(['club', 'season'])->first();
@@ -85,7 +73,6 @@ class MatchController extends Controller
 
         $season = $userClub->season;
 
-        // Calculate league table
         $table = Club::get()
         ->map(function ($club) use ($season) {
             $matches = MatchGame::where('SeasonID', $season->SeasonID)
@@ -93,7 +80,7 @@ class MatchController extends Controller
                     $q->where('HomeClubID', $club->ClubID)
                       ->orWhere('AwayClubID', $club->ClubID);
                 })
-                ->whereNotNull('ScoreHome')
+                ->where('Status', '=', 'Finished')
                 ->get();
 
             $points = 0;

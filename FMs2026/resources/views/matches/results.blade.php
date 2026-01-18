@@ -1,10 +1,10 @@
 @extends('layouts.game')
 
-@section('title', 'Матчі - Результати')
+@section('title', __('matches.results'))
 
 @section('content')
 <div class="mb-30">
-    <h2>Результати матчів</h2>
+    <h2>{{ __('matches.match_results') }}</h2>
 </div>
 
 <div class="row">
@@ -13,13 +13,13 @@
         <div class="match-result-card">
             <div class="match-header">
                 <small class="text-muted">{{ $match->MatchDate?->format('d.m.Y H:i') }}</small>
-                <span class="badge bg-success">Завершений</span>
+                <span class="badge bg-success">{{ __('matches.completed') }}</span>
             </div>
             <div class="match-body">
                 <div class="row align-items-center">
                     <div class="col-4 text-end">
                         <p class="mb-0"><strong>{{ $match->homeClub->ClubName }}</strong></p>
-                        <small class="text-muted">Дома</small>
+                        <small class="text-muted">{{ __('matches.home') }}</small>
                     </div>
                     <div class="col-4 text-center">
                         <h3 class="mb-0">{{ $match->ScoreHome }}:{{ $match->ScoreAway }}</h3>
@@ -27,22 +27,22 @@
                         $result = $match->getResult();
                         @endphp
                         @if($result === 'HomeWin')
-                            <small class="badge bg-success">Перемога дома</small>
+                            <small class="badge bg-success">{{ __('matches.home_win') }}</small>
                         @elseif($result === 'AwayWin')
-                            <small class="badge bg-danger">Перемога гостей</small>
+                            <small class="badge bg-danger">{{ __('matches.away_win') }}</small>
                         @else
-                            <small class="badge bg-info">Нічия</small>
+                            <small class="badge bg-info">{{ __('matches.draw') }}</small>
                         @endif
                     </div>
                     <div class="col-4">
                         <p class="mb-0"><strong>{{ $match->awayClub->ClubName }}</strong></p>
-                        <small class="text-muted">Гості</small>
+                        <small class="text-muted">{{ __('matches.away') }}</small>
                     </div>
                 </div>
             </div>
             <div class="match-footer">
                 <a href="{{ route('matches.detail', $match->MatchID) }}" class="btn btn-sm btn-primary">
-                    Деталі
+                    {{ __('matches.details') }}
                 </a>
             </div>
         </div>
@@ -50,7 +50,7 @@
     @empty
     <div class="col-12">
         <div class="alert alert-info">
-            Немає завершених матчів
+            {{ __('matches.no_completed') }}
         </div>
     </div>
     @endforelse

@@ -49,6 +49,8 @@ class DatabaseSeeder extends Seeder
             'TournamentID' => $tournament->TournamentID,
             'StartDate' => Carbon::createFromDate(2025, 8, 1),
             'EndDate' => Carbon::createFromDate(2026, 6, 1),
+            'TotalRounds' => 30,
+            'CurrentRound' => 1,
         ]);
 
         // Create clubs
@@ -119,7 +121,7 @@ class DatabaseSeeder extends Seeder
         }
 
         // Create some matches for the season
-        $matchDate = Carbon::createFromDate(2025, 8, 16);
+        $matchDate = Carbon::now()->startOfDay();
         $matchCounter = 0;
 
         for ($round = 1; $round <= 5; $round++) {
@@ -132,10 +134,14 @@ class DatabaseSeeder extends Seeder
                         'SeasonID' => $season->SeasonID,
                         'HomeClubID' => $clubs[$i]->ClubID,
                         'AwayClubID' => $clubs[$i + 1]->ClubID,
-                        'MatchDate' => $matchDate->copy()->addDays($matchCounter),
+                        'MatchDate' => $matchDate->copy()->addDays($matchCounter)->addHours(15 + ($i % 3)),
                         'Stadium' => $clubs[$i]->Stadium,
                         'ScoreHome' => $scoreHome,
                         'ScoreAway' => $scoreAway,
+                        'Status' => $matchCounter % 3 == 0 ? 'Finished' : 'Scheduled',
+                        'Result' => $matchCounter % 3 == 0 ? ($scoreHome > $scoreAway ? 'HomeWin' : ($scoreAway > $scoreHome ? 'AwayWin' : 'Draw')) : 'Pending',
+                        'Attendance' => $matchCounter % 3 == 0 ? rand(15000, 75000) : null,
+                        'Round' => $round,
                     ]);
                     $matchCounter++;
                 }

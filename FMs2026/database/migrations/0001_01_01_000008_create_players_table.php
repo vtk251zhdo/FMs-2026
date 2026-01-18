@@ -17,6 +17,9 @@ return new class extends Migration
             $table->unsignedInteger('Number');
             $table->decimal('Rating', 4, 2);
             $table->decimal('Value', 15, 2);
+            $table->unsignedInteger('Appearances')->default(0);
+            $table->unsignedInteger('Goals')->default(0);
+            $table->unsignedInteger('Assists')->default(0);
             $table->foreignId('ClubID')->constrained('Clubs', 'ClubID')->onDelete('cascade');
         });
     }

@@ -18,12 +18,7 @@
         }
 
         body {
-            background-image:
-                linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-                url('/images/theme_main_page.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             color: #333;
         }
@@ -51,7 +46,6 @@
         }
 
         .main-content {
-            height: 95vh;
             background: rgba(255, 255, 255, 0.65);
             margin: 20px;
             border-radius: 14px;
@@ -80,16 +74,51 @@
         }
 
         .player-card {
+            background: #ffffff;
             border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 15px;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-bottom: 15px;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 18px;
+
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
         }
 
         .player-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .player-rating {
+            min-width: 44px;
+            height: 44px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 16px;
+
+            color: white;
+        }
+
+        .player-rating[data-rating^="9"],
+        .player-rating[data-rating^="8"] {
+            background: #10b981;
+        }
+
+        .player-rating[data-rating^="7"],
+        .player-rating[data-rating^="6"] {
+            background: #f59e0b;
+        }
+
+        .player-rating[data-rating^="5"],
+        .player-rating[data-rating^="4"],
+        .player-rating[data-rating^="3"],
+        .player-rating[data-rating^="2"],
+        .player-rating[data-rating^="1"] {
+            background: #ef4444;
         }
 
         .badge-rating {
@@ -101,7 +130,7 @@
 
         .badge-rating.high {
             background: var(--success);
-            color: white;
+            color: black;
         }
 
         .badge-rating.medium {
@@ -148,11 +177,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+
             padding: 12px 18px;
+
             background: rgba(255, 255, 255, 0.55);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+
             border: 1px solid rgba(255, 255, 255, 0.35);
+
             box-shadow:
                 0 6px 18px rgba(0, 0, 0, 0.12),
                 inset 0 1px 0 rgba(255, 255, 255, 0.4);
@@ -162,6 +195,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+
             font-weight: 500;
             color: #1f2937;
         }
@@ -196,6 +230,24 @@
             background: #2563eb;
             color: #ffffff;
             border-color: #2563eb;
+        }
+
+        .pagination .page-link {
+            color: #1e3a5f;
+            border-radius: 6px;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .pagination .page-item.active .page-link {
+            background: #1e3a5f;
+            border-color: #1e3a5f;
+            color: #fff;
         }
     </style>
     @stack('styles')
@@ -253,7 +305,6 @@
                     </nav>
                 @endif
             </div>
-
             <div class="col-md-9 col-lg-10">
                 <div class="main-content">
                     @if($errors->any())
@@ -320,7 +371,6 @@
                                 button.style.color = '#374151';
                                 button.style.borderColor = 'rgba(255, 255, 255, 0.4)';
                             });
-
                             this.classList.add('active');
                             this.style.background = '#2563eb';
                             this.style.color = '#ffffff';

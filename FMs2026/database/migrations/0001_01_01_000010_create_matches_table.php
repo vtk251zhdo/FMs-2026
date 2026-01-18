@@ -12,10 +12,14 @@ return new class extends Migration
             $table->id('MatchID');
             $table->foreignId('HomeClubID')->constrained('Clubs', 'ClubID');
             $table->foreignId('AwayClubID')->constrained('Clubs', 'ClubID');
-            $table->date('MatchDate');
-            $table->string('Stadium', 100);
+            $table->dateTime('MatchDate')->nullable();
+            $table->string('Stadium', 100)->nullable();
             $table->unsignedInteger('ScoreHome')->default(0);
             $table->unsignedInteger('ScoreAway')->default(0);
+            $table->string('Status')->default('Scheduled');
+            $table->string('Result')->default('Pending');
+            $table->unsignedInteger('Attendance')->nullable();
+            $table->integer('Round')->default(1);
             $table->foreignId('SeasonID')->constrained('Seasons', 'SeasonID')->onDelete('cascade');
         });
     }
