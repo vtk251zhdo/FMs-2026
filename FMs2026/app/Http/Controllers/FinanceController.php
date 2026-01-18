@@ -8,9 +8,6 @@ use Illuminate\Http\Request;
 
 class FinanceController extends Controller
 {
-    /**
-     * Show finances overview
-     */
     public function index()
     {
         $userClub = UserClub::with(['club', 'season'])->first();
@@ -25,14 +22,12 @@ class FinanceController extends Controller
         $currentBudget = $club->Budget;
         $squadValue = $club->players()->sum('Value');
         
-        // Get recent transfers
         $recentTransfers = Transfer::where('ToClubID', $club->ClubID)
             ->orWhere('FromClubID', $club->ClubID)
             ->orderBy('TransferDate', 'desc')
             ->limit(10)
             ->get();
         
-        // Calculate spending this season
         $transferSpending = Transfer::where('ToClubID', $club->ClubID)
             ->whereYear('TransferDate', $season->StartDate->year)
             ->sum('TransferFee');
@@ -52,9 +47,6 @@ class FinanceController extends Controller
         ]);
     }
 
-    /**
-     * Show budget details
-     */
     public function budget()
     {
         $userClub = UserClub::with(['club', 'season'])->first();

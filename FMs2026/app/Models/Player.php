@@ -21,6 +21,9 @@ class Player extends Model
         'Rating',
         'Value',
         'ClubID',
+        'Appearances',
+        'Goals',
+        'Assists',
     ];
 
     public function club(): BelongsTo

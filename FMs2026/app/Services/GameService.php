@@ -12,48 +12,36 @@ use Illuminate\Support\Collection;
 
 class GameService
 {
-    /**
-     * Simulate a match and generate results
-     */
+
     public static function simulateMatch(MatchGame $match)
     {
         $homeClub = $match->homeClub;
         $awayClub = $match->awayClub;
 
-        // Get squad overall ratings
         $homeRating = $homeClub->players()->avg('Overall') ?? 70;
         $awayRating = $awayClub->players()->avg('Overall') ?? 70;
-
-        // Calculate expected goals based on ratings and randomness
         $homeExpectedGoals = static::calculateExpectedGoals($homeRating, $awayRating);
         $awayExpectedGoals = static::calculateExpectedGoals($awayRating, $homeRating);
 
-        // Generate actual goals with some randomness
         $homeGoals = max(0, $homeExpectedGoals + rand(-2, 2));
         $awayGoals = max(0, $awayExpectedGoals + rand(-2, 2));
 
-        // Update match
         $match->update([
-            'HomeGoals' => $homeGoals,
-            'AwayGoals' => $awayGoals,
+            'ScoreHome' => $homeGoals,
+            'ScoreAway' => $awayGoals,
             'Status' => 'Finished',
             'Result' => self::determineResult($homeGoals, $awayGoals),
             'Attendance' => rand(15000, 75000),
             'MatchDate' => now(),
         ]);
 
-        // Generate player stats
-        static::generatePlayerStats($match, $homeClub->id, $awayClub->id);
+        static::generatePlayerStats($match, $homeClub->ClubID, $awayClub->ClubID);
 
-        // Update league table
         static::updateLeagueTable($match);
 
         return $match;
     }
 
-    /**
-     * Calculate expected goals
-     */
     private static function calculateExpectedGoals($teamRating, $opponentRating)
     {
         $ratingDifference = $teamRating - $opponentRating;
@@ -63,9 +51,6 @@ class GameService
         return max(0, min(5, $baseGoals + $modifier));
     }
 
-    /**
-     * Determine match result
-     */
     private static function determineResult($homeGoals, $awayGoals)
     {
         if ($homeGoals > $awayGoals) {
@@ -76,28 +61,20 @@ class GameService
         return 'Draw';
     }
 
-    /**
-     * Generate player stats for a match
-     */
     private static function generatePlayerStats(MatchGame $match, $homeClubId, $awayClubId)
     {
         $homeTeam = Player::where('ClubID', $homeClubId)->inRandomOrder()->limit(11)->get();
         $awayTeam = Player::where('ClubID', $awayClubId)->inRandomOrder()->limit(11)->get();
 
-        // Generate home team stats
         foreach ($homeTeam as $player) {
-            static::createPlayerStat($match, $player, $match->HomeGoals, $match->AwayGoals, true);
+            static::createPlayerStat($match, $player, $match->ScoreHome, $match->ScoreAway, true);
         }
 
-        // Generate away team stats
         foreach ($awayTeam as $player) {
-            static::createPlayerStat($match, $player, $match->HomeGoals, $match->AwayGoals, false);
+            static::createPlayerStat($match, $player, $match->ScoreHome, $match->ScoreAway, false);
         }
     }
 
-    /**
-     * Create individual player stats
-     */
     private static function createPlayerStat(MatchGame $match, Player $player, $homeGoals, $awayGoals, $isHome)
     {
         $minutes = rand(60, 90);
@@ -107,7 +84,6 @@ class GameService
         $assists = 0;
         $shots = rand(0, 5);
 
-        // Forwards more likely to score
         if (in_array($player->Position, ['ST', 'CF', 'LW', 'RW'])) {
             if (rand(1, 100) > 85) {
                 $goals = rand(1, 3);
@@ -115,7 +91,6 @@ class GameService
             }
         }
 
-        // Midfielders can assist
         if (in_array($player->Position, ['CM', 'CAM', 'LM', 'RM'])) {
             if (rand(1, 100) > 90) {
                 $assists = rand(1, 2);
@@ -142,15 +117,11 @@ class GameService
             'Rating' => $rating,
         ]);
 
-        // Update player's career stats
         $player->increment('Appearances');
         $player->increment('Goals', $goals);
         $player->increment('Assists', $assists);
     }
 
-    /**
-     * Update league table after match
-     */
     private static function updateLeagueTable(MatchGame $match)
     {
         $homeEntry = LeagueTable::firstOrCreate(
@@ -183,10 +154,9 @@ class GameService
             ]
         );
 
-        // Update home team
         $homeEntry->increment('Played');
-        $homeEntry->increment('GoalsFor', $match->HomeGoals);
-        $homeEntry->increment('GoalsAgainst', $match->AwayGoals);
+        $homeEntry->increment('GoalsFor', $match->ScoreHome);
+        $homeEntry->increment('GoalsAgainst', $match->ScoreAway);
 
         if ($match->Result === 'HomeWin') {
             $homeEntry->increment('Wins');
@@ -198,10 +168,9 @@ class GameService
             $homeEntry->increment('Losses');
         }
 
-        // Update away team
         $awayEntry->increment('Played');
-        $awayEntry->increment('GoalsFor', $match->AwayGoals);
-        $awayEntry->increment('GoalsAgainst', $match->HomeGoals);
+        $awayEntry->increment('GoalsFor', $match->ScoreAway);
+        $awayEntry->increment('GoalsAgainst', $match->ScoreHome);
 
         if ($match->Result === 'AwayWin') {
             $awayEntry->increment('Wins');
@@ -213,14 +182,10 @@ class GameService
             $awayEntry->increment('Losses');
         }
 
-        // Update goal differences
         $homeEntry->update(['GoalDifference' => $homeEntry->GoalsFor - $homeEntry->GoalsAgainst]);
         $awayEntry->update(['GoalDifference' => $awayEntry->GoalsFor - $awayEntry->GoalsAgainst]);
     }
 
-    /**
-     * Advance season to next round
-     */
     public static function advanceSeason(Season $season)
     {
         $season->increment('CurrentRound');
@@ -233,16 +198,12 @@ class GameService
         return 'advanced';
     }
 
-    /**
-     * Generate season schedule
-     */
     public static function generateSchedule(Season $season)
     {
         $clubs = Club::all();
         $round = 1;
         $matches = [];
 
-        // Round-robin tournament
         for ($matchDay = 1; $matchDay <= $season->TotalRounds; $matchDay++) {
             $matchesThisRound = [];
 

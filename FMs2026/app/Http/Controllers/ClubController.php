@@ -8,9 +8,7 @@ use App\Models\UserClub;
 
 class ClubController extends Controller
 {
-    /**
-     * Show club overview
-     */
+
     public function overview()
     {
         $userClub = UserClub::with(['club', 'season'])->first();
@@ -29,9 +27,6 @@ class ClubController extends Controller
         ]);
     }
 
-    /**
-     * Show players in club
-     */
     public function players()
     {
         $userClub = UserClub::with(['club', 'season'])->first();
@@ -49,9 +44,6 @@ class ClubController extends Controller
         ]);
     }
 
-    /**
-     * Show player details
-     */
     public function playerDetail($id)
     {
         $userClub = UserClub::with(['club', 'season'])->first();
@@ -68,9 +60,6 @@ class ClubController extends Controller
         ]);
     }
 
-    /**
-     * Show coaches
-     */
     public function coaches()
     {
         $userClub = UserClub::with(['club', 'season'])->first();
@@ -88,9 +77,6 @@ class ClubController extends Controller
         ]);
     }
 
-    /**
-     * Show club facilities
-     */
     public function facilities()
     {
         $userClub = UserClub::with(['club', 'season'])->first();

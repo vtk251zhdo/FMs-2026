@@ -20,11 +20,25 @@ class MatchGame extends Model
         'Stadium',
         'ScoreHome',
         'ScoreAway',
+        'Status',
+        'Result',
+        'Attendance',
+        'Round',
     ];
 
     protected $casts = [
-        'MatchDate' => 'date',
+        'MatchDate' => 'datetime',
     ];
+
+    public function getStatusText(): string
+    {
+        return match($this->Status) {
+            'Finished' => 'Завершено',
+            'Scheduled' => 'Запланована',
+            'Live' => 'Йде матч',
+            default => $this->Status,
+        };
+    }
 
     public function homeClub(): BelongsTo
     {

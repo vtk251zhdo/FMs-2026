@@ -11,7 +11,9 @@ return new class extends Migration
         Schema::create('Seasons', function (Blueprint $table) {
             $table->id('SeasonID');
             $table->date('StartDate');
-            $table->date('EndDate');
+            $table->date('EndDate')->nullable();
+            $table->unsignedInteger('TotalRounds')->default(38);
+            $table->unsignedInteger('CurrentRound')->default(0);
             $table->foreignId('TournamentID')->constrained('Tournaments', 'TournamentID');
         });
     }

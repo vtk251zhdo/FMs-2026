@@ -16,6 +16,8 @@ class Season extends Model
         'TournamentID',
         'StartDate',
         'EndDate',
+        'TotalRounds',
+        'CurrentRound',
     ];
 
     protected $casts = [
