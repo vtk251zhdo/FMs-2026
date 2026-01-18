@@ -254,6 +254,7 @@ return [
     'matches.gd' => 'Р.М',
     'matches.p' => 'О',
     'matches.table_empty' => 'Таблиця пуста',
+    'matches.results' => 'Результати',
     'matches.match_results' => 'Результати матчів',
     'matches.completed' => 'Завершений',
     'matches.home_win' => 'Перемога дома',

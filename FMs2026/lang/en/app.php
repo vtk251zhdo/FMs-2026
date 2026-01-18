@@ -254,6 +254,7 @@ return [
     'matches.gd' => 'GD',
     'matches.p' => 'Pts',
     'matches.table_empty' => 'Table is empty',
+    'matches.results' => 'Results',
     'matches.match_results' => 'Match Results',
     'matches.completed' => 'Completed',
     'matches.home_win' => 'Home Win',
