@@ -1,4 +1,4 @@
-@extends('layouts.game')
+@extends('layouts.game-2')
 
 @section('title', __('app.transfers.sell_players'))
 

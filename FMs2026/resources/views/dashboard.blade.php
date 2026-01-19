@@ -1,6 +1,6 @@
 @extends('layouts.game')
 
-@section('title', __('dashboard.welcome'))
+@section('title', __('app.dashboard.welcome'))
 
 @section('content')
     <div class="club-header">

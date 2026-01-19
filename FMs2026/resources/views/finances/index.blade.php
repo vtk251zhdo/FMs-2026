@@ -73,7 +73,7 @@
                                 <i class="bi bi-arrow-right"></i>
                                 {{ $transfer->toClub->ClubName }}
                             </small><br>
-                            <small style="color: var(--success);">
+                            <small style="color: black;">
                                 ${{ number_format($transfer->TransferFee, 0, ',', ' ') }} -
                                 {{ $transfer->TransferDate->format('d.m.Y') }}
                             </small>

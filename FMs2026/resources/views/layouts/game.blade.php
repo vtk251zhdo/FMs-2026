@@ -206,7 +206,7 @@
         <div class="row">
             <div class="col-md-3 col-lg-2 sidebar d-none d-md-block">
                 <div class="text-center mb-30" style="padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.2);">
-                    <h5 class="mb-2">FM 2026</h5>
+                    <h5 class="mb-2">FMs 2026</h5>
                     <small>Football Manager</small>
                 </div>
                 <div class="fm-topbar mb-3">
@@ -215,6 +215,7 @@
                         <span>
                             {{ session('username') ?? 'Manager' }}
                         </span>
+
                     </div>
 
                     <div class="fm-lang-switch">
@@ -225,6 +226,14 @@
 
                 @if(session()->has('user_id'))
                     <nav class="nav flex-column">
+
+                        @if(session('role') === 'admin')
+                            <a class="nav-link" href="{{ route('admin.dashboard') }}" style="background: rgba(255, 215, 0, 0.2); border-left-color: #ffd700;">
+                                <i class="bi bi-shield-lock"></i> 👑 {{ __('app.nav.admin_panel') ?? 'Адмін панель' }}
+                            </a>
+                            <hr style="border-top: 1px solid rgba(255,255,255,0.2);">
+                        @endif
+
                         <a class="nav-link" href="/dashboard">
                             <i class="bi bi-house-fill"></i> {{ __('app.nav.dashboard') }}
                         </a>
@@ -247,9 +256,13 @@
                             <i class="bi bi-wallet2"></i> {{ __('app.nav.finances') }}
                         </a>
                         <hr style="border-top: 1px solid rgba(255,255,255,0.2);">
-                        <a class="nav-link" href="/logout">
-                            <i class="bi bi-box-arrow-right"></i> {{ __('app.nav.logout') }}
-                        </a>
+                        <form action="/logout" method="POST" style="display: inline;">
+                            @csrf
+                            <button type="submit" class="nav-link" style="background: none; border: none; padding: 12px 20px; cursor: pointer; text-align: left;">
+                                <i class="bi bi-box-arrow-right"></i> {{ __('app.nav.logout') }}
+                            </button>
+                        </form>
+                        
                     </nav>
                 @endif
             </div>

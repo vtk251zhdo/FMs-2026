@@ -19,12 +19,23 @@ class GameUser extends Model
         'PasswordHash',
         'RegisterDate',
         'LastLogin',
+        'role',
     ];
 
     protected $casts = [
         'RegisterDate' => 'date',
         'LastLogin' => 'datetime',
     ];
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isPlayer(): bool
+    {
+        return $this->role === 'player';
+    }
 
     public function userClubs(): HasMany
     {

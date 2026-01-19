@@ -29,9 +29,12 @@ class AuthController extends Controller
             'PasswordHash' => Hash::make($request->password),
             'RegisterDate' => now()->toDateString(),
             'LastLogin' => now(),
+            'role' => 'player', 
         ]);
 
         Session::put('user_id', $user->UserID);
+        Session::put('username', $user->Username);
+        Session::put('role', $user->role);
 
         return redirect('/dashboard');
     }
@@ -46,13 +49,19 @@ class AuthController extends Controller
 
         $user->update(['LastLogin' => now()]);
         Session::put('user_id', $user->UserID);
+        Session::put('username', $user->Username);
+        Session::put('role', $user->role);
+
+        if ($user->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        }
 
         return redirect('/dashboard');
     }
 
     public function logout()
     {
-        Session::forget('user_id');
+        Session::forget(['user_id', 'username']);
         return redirect('/');
     }
 }

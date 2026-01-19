@@ -20,6 +20,9 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
+        // Запустити AdminSeeder для створення адміна
+        $this->call(AdminSeeder::class);
+
         // Create game users (managers)
         $user1 = GameUser::create([
             'Username' => 'player1',

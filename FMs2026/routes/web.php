@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClubController;
 use App\Http\Controllers\MatchController;
 use App\Http\Controllers\TransferController;
@@ -28,13 +29,14 @@ Route::view('/', 'home')->name('home');
 | Authentication
 |--------------------------------------------------------------------------
 */
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
+Route::middleware(['web'])->group(function () {
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});
 
-Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register']);
-
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 /*
 |--------------------------------------------------------------------------
@@ -178,6 +180,26 @@ Route::middleware(['auth.session'])->group(function () {
         Route::get('/', [FinanceController::class, 'index'])->name('finances.index');
         Route::get('/budget', [FinanceController::class, 'budget'])->name('finances.budget');
     });
+});
+
+/*
+|--------------------------------------------------------------------------
+| Admin Routes (Protected with IsAdmin Middleware)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['web', 'isAdmin'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    
+    // Управління користувачами
+    Route::prefix('users')->group(function () {
+        Route::get('/', [AdminController::class, 'users'])->name('admin.users');
+        Route::get('/{id}', [AdminController::class, 'showUser'])->name('admin.users.show');
+        Route::post('/{id}/change-role', [AdminController::class, 'changeRole'])->name('admin.users.change-role');
+        Route::delete('/{id}', [AdminController::class, 'deleteUser'])->name('admin.users.delete');
+    });
+    
+    // Статистика
+    Route::get('/statistics', [AdminController::class, 'statistics'])->name('admin.statistics');
 });
 
 /*

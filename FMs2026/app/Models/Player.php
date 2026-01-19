@@ -56,6 +56,3 @@ class Player extends Model
         return round($this->stats()->avg('Rating') ?? 0, 2);
     }
 }
-
-
-

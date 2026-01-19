@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="mb-30">
-        <a href="{{ route('club.players') }}" class="btn btn-sm btn-outline-secondary">← {{ __('app.back') }}</a>
+        <a href="{{ route('club.players') }}" class="btn btn-sm btn-outline-secondary">← {{ __('app.app.back') }}</a>
         <h2>{{ $player->FullName }}</h2>
     </div>
 
@@ -51,7 +51,7 @@
 
     <div class="row mt-3">
         <div class="col-12">
-            <a href="{{ route('app.transfers.sell') }}" class="btn btn-danger">
+            <a href="{{ route('transfers.sell') }}" class="btn btn-danger">
                 <i class="bi bi-cash-coin"></i> {{ __('app.transfers.sell_player') }}
             </a>
         </div>

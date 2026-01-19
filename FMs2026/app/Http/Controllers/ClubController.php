@@ -12,7 +12,7 @@ class ClubController extends Controller
     public function overview()
     {
         $userClub = UserClub::with(['club', 'season'])->first();
-        
+
         if (!$userClub) {
             return redirect()->route('dashboard');
         }
@@ -30,7 +30,7 @@ class ClubController extends Controller
     public function players()
     {
         $userClub = UserClub::with(['club', 'season'])->first();
-        
+
         if (!$userClub) {
             return redirect()->route('dashboard');
         }
@@ -47,7 +47,7 @@ class ClubController extends Controller
     public function playerDetail($id)
     {
         $userClub = UserClub::with(['club', 'season'])->first();
-        
+
         if (!$userClub) {
             return redirect()->route('dashboard');
         }
@@ -63,7 +63,7 @@ class ClubController extends Controller
     public function coaches()
     {
         $userClub = UserClub::with(['club', 'season'])->first();
-        
+
         if (!$userClub) {
             return redirect()->route('dashboard');
         }
@@ -80,7 +80,7 @@ class ClubController extends Controller
     public function facilities()
     {
         $userClub = UserClub::with(['club', 'season'])->first();
-        
+
         if (!$userClub) {
             return redirect()->route('dashboard');
         }
