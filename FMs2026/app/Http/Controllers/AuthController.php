@@ -19,8 +19,6 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-
-
     public function register(Request $request)
     {
         $user = GameUser::create([
