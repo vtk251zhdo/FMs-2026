@@ -16,7 +16,7 @@ PROGRAMMING PRINCIPLES
 . Водночас сам контролер повертає відповідні Blade-представлення, наприклад [ClubController.php#L24-L33]
  та [ClubController.php#L35-L46]
 .
-
+- Обробка запиту: [ClubController.php#L35-L46](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/app/Http/Controllers/ClubController.php#L35-L46)
 2. MVC — використання шаблону Model–View–Controller
 
 Проєкт фактично побудований за патерном MVC.
