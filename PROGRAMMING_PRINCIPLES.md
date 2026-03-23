@@ -22,7 +22,7 @@ PROGRAMMING PRINCIPLES
 Проєкт фактично побудований за патерном MVC.
 Model представлена Eloquent-моделями, які описують таблиці, ключі, зв’язки та атрибути, наприклад [Player.php#L9-L58](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/app/Models/Player.php#L9-L58)
 .
-Controller керує обробкою запиту, отримує дані та передає їх у представлення, наприклад [ClubController.php#L35-L46](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/app/Http/Controllers/ClubController.php#L35-L46)
+Controller керує обробкою запиту, отримує дані та передає їх у представлення, наприклад [ClubController.php#L30-L45](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/app/Http/Controllers/ClubController.php#L30-L45)
 .
 View відповідає за інтерфейс і використовує Blade-шаблони, наприклад [dashboard.blade.php#L1-L20](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/resources/views/dashboard.blade.php#L1-L20)
 .
@@ -44,7 +44,7 @@ View відповідає за інтерфейс і використовує Bl
 сортує гравців;
 повертає потрібне представлення.
 
-Це видно у [ClubController.php#L35-L46](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/app/Http/Controllers/ClubController.php#L35-L46)
+Це видно у [ClubController.php#L30-L45](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/app/Http/Controllers/ClubController.php#L30-L45)
 . Такий підхід робить код зрозумілим і легким для підтримки.
 
 Схожий простий підхід є і в автентифікації: реєстрація створює користувача, зберігає потрібні значення в сесії та виконує редірект, а логін перевіряє пароль і так само перенаправляє користувача: [AuthController.php#L32-L57](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/app/Http/Controllers/AuthController.php#L32-L57)
