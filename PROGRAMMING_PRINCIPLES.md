@@ -14,7 +14,7 @@ PROGRAMMING PRINCIPLES
 
 Наприклад, маршрути для блоку клубу делегують обробку в ClubController, а не містять HTML або SQL безпосередньо в маршрутах: [web.php#L147-L152](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/routes/web.php#L147-L152)
 . Водночас сам контролер повертає відповідні Blade-представлення, наприклад [ClubController.php#L22-L28](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/app/Http/Controllers/ClubController.php#L22-L28)
- та [ClubController.php#L35-L46](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/app/Http/Controllers/ClubController.php#L35-L46)
+ та [ClubController.php#L30-L45](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/app/Http/Controllers/ClubController.php#L30-L45)
 .
 
 2. MVC — використання шаблону Model–View–Controller
