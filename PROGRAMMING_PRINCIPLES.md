@@ -13,26 +13,26 @@ PROGRAMMING PRINCIPLES
 . Це означає, що HTTP-маршрути, бізнес-логіка доступу до даних і відображення інтерфейсу не змішані в одному файлі.
 
 Наприклад, маршрути для блоку клубу делегують обробку в ClubController, а не містять HTML або SQL безпосередньо в маршрутах: [./FMs2026/routes/web.php#L152-L159]
-. Водночас сам контролер повертає відповідні Blade-представлення, наприклад [ClubController.php#L24-L33]
- та [ClubController.php#L35-L46]
+. Водночас сам контролер повертає відповідні Blade-представлення, наприклад [ClubController.php#L24-L33](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/app/Http/Controllers/ClubController.php#L24-L33)
+ та [ClubController.php#L35-L46](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/app/Http/Controllers/ClubController.php#L35-L46)
 .
-- Обробка запиту: [ClubController.php#L35-L46](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/app/Http/Controllers/ClubController.php#L35-L46)
+
 2. MVC — використання шаблону Model–View–Controller
 
 Проєкт фактично побудований за патерном MVC.
-Model представлена Eloquent-моделями, які описують таблиці, ключі, зв’язки та атрибути, наприклад [Player.php#L14-L48]
+Model представлена Eloquent-моделями, які описують таблиці, ключі, зв’язки та атрибути, наприклад [Player.php#L14-L48](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/app/Models/Player.php#L14-L48)
 .
-Controller керує обробкою запиту, отримує дані та передає їх у представлення, наприклад [ClubController.php#L35-L46]
+Controller керує обробкою запиту, отримує дані та передає їх у представлення, наприклад [ClubController.php#L35-L46](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/app/Http/Controllers/ClubController.php#L35-L46)
 .
-View відповідає за інтерфейс і використовує Blade-шаблони, наприклад [dashboard.blade.php#L1-L20]
+View відповідає за інтерфейс і використовує Blade-шаблони, наприклад [dashboard.blade.php#L1-L20](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/resources/views/dashboard.blade.php#L1-L20)
 .
 
 3. DRY (Don't Repeat Yourself) — уникнення дублювання
 
-У проєкті використано спільний макет сторінок, щоб не дублювати однакову HTML-структуру на кожній сторінці. Сторінка dashboard підключає спільний layout через @extends('layouts.game'): [dashboard.blade.php#L1-L3]
-. У самому layout зосереджені спільні елементи інтерфейсу: заголовок сторінки, навігація, повідомлення про помилки/успіх, а також @yield('content') для вставки конкретного вмісту сторінки: [game.blade.php#L143-L145]
-, [game.blade.php#L262-L290]
-, [game.blade.php#L349-L354]
+У проєкті використано спільний макет сторінок, щоб не дублювати однакову HTML-структуру на кожній сторінці. Сторінка dashboard підключає спільний layout через @extends('layouts.game'): [dashboard.blade.php#L1-L3](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/resources/views/dashboard.blade.php#L1-L3)
+. У самому layout зосереджені спільні елементи інтерфейсу: заголовок сторінки, навігація, повідомлення про помилки/успіх, а також @yield('content') для вставки конкретного вмісту сторінки: [game.blade.php#L143-L145](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/resources/views/layouts/game.blade.php#L143-L145)
+, [game.blade.php#L262-L290](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/resources/views/layouts/game.blade.php#L262-L290)
+, [game.blade.php#L349-L354](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/resources/views/layouts/game.blade.php#L349-L354)
 . Це зменшує дублювання та спрощує підтримку інтерфейсу.
 
 4. KISS (Keep It Simple, Stupid) — проста і зрозуміла реалізація
@@ -44,33 +44,33 @@ View відповідає за інтерфейс і використовує Bl
 сортує гравців;
 повертає потрібне представлення.
 
-Це видно у [ClubController.php#L35-L46]
+Це видно у [ClubController.php#L35-L46](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/app/Http/Controllers/ClubController.php#L35-L46)
 . Такий підхід робить код зрозумілим і легким для підтримки.
 
-Схожий простий підхід є і в автентифікації: реєстрація створює користувача, зберігає потрібні значення в сесії та виконує редірект, а логін перевіряє пароль і так само перенаправляє користувача: [AuthController.php#L32-L57]
+Схожий простий підхід є і в автентифікації: реєстрація створює користувача, зберігає потрібні значення в сесії та виконує редірект, а логін перевіряє пароль і так само перенаправляє користувача: [AuthController.php#L32-L57](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/app/Http/Controllers/AuthController.php#L32-L57)
 .
 
 5. Encapsulation / ORM-підхід — інкапсуляція роботи з даними в моделях
 
-Робота з даними інкапсульована в Eloquent-моделях. Наприклад, модель Player містить не лише опис полів, а й зв’язки club(), stats(), transfers(), а також методи getGoalsCount(), getAssistsCount(), getAverageRating(): [Player.php#L14-L58]
+Робота з даними інкапсульована в Eloquent-моделях. Наприклад, модель Player містить не лише опис полів, а й зв’язки club(), stats(), transfers(), а також методи getGoalsCount(), getAssistsCount(), getAverageRating(): [Player.php#L14-L58](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/app/Models/Player.php#L14-L58)
 . Завдяки цьому контролери не дублюють логіку доступу до пов’язаних даних.
 
 Аналогічно, модель матчу містить окремі методи для перетворення технічного статусу в зрозумілий текст та зв’язки з домашнім і виїзним клубами: MatchGame.php#L27-L54
-. Модель трансферу також описує зв’язки з гравцем і клубами: [Transfer.php#L13-L41]
+. Модель трансферу також описує зв’язки з гравцем і клубами: [Transfer.php#L13-L41](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/app/Models/Transfer.php#L13-L41)
 .
 
 6. Validation — перевірка вхідних даних
 
-У проєкті застосовано валідацію вхідних даних через Laravel-механізм validate(). Наприклад, при старті нової кар’єри перевіряється, що club_id переданий і що такий клуб існує в таблиці Clubs: [routes/web.php#L87-L91]
+У проєкті застосовано валідацію вхідних даних через Laravel-механізм validate(). Наприклад, при старті нової кар’єри перевіряється, що club_id переданий і що такий клуб існує в таблиці Clubs: [routes/web.php#L87-L91](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/routes/web.php#L87-L91)
 . Це зменшує ризик некоректних даних і робить код безпечнішим.
 
 7. Role-based access / контроль доступу
 
-У проєкті реалізовано розмежування доступу за ролями. Адміністративні маршрути винесені в окрему групу та захищені middleware isAdmin: [routes/web.php#L191-L199]
-. Крім того, в layout окремо відображається посилання на адмін-панель лише для користувачів із роллю admin: [game.blade.php#L263-L272]
+У проєкті реалізовано розмежування доступу за ролями. Адміністративні маршрути винесені в окрему групу та захищені middleware isAdmin: [routes/web.php#L191-L199](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/routes/web.php#L191-L199)
+. Крім того, в layout окремо відображається посилання на адмін-панель лише для користувачів із роллю admin: [game.blade.php#L263-L272](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/resources/views/layouts/game.blade.php#L263-L272)
 . Це показує, що принцип безпечного доступу врахований і на рівні маршрутів, і на рівні інтерфейсу.
 
 8. Security basics — базові практики безпеки
 
-У контролері автентифікації паролі не зберігаються у відкритому вигляді: під час реєстрації використовується Hash::make(...), а під час входу — Hash::check(...): [AuthController.php#L32-L45]
+У контролері автентифікації паролі не зберігаються у відкритому вигляді: під час реєстрації використовується Hash::make(...), а під час входу — Hash::check(...): [AuthController.php#L32-L45](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/app/Http/Controllers/AuthController.php#L32-L45)
 . Це демонструє дотримання базового принципу безпечної роботи з обліковими даними.
