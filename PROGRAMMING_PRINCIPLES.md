@@ -20,7 +20,7 @@ PROGRAMMING PRINCIPLES
 2. MVC — використання шаблону Model–View–Controller
 
 Проєкт фактично побудований за патерном MVC.
-Model представлена Eloquent-моделями, які описують таблиці, ключі, зв’язки та атрибути, наприклад [Player.php#L14-L48](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/app/Models/Player.php#L14-L48)
+Model представлена Eloquent-моделями, які описують таблиці, ключі, зв’язки та атрибути, наприклад [Player.php#L9-L58](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/app/Models/Player.php#L9-L58)
 .
 Controller керує обробкою запиту, отримує дані та передає їх у представлення, наприклад [ClubController.php#L35-L46](https://github.com/vtk251zhdo/FMs-2026/blob/master/FMs2026/app/Http/Controllers/ClubController.php#L35-L46)
 .
