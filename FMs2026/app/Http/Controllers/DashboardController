@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\UserClub;
+use App\Models\MatchGame;
+
+class DashboardController extends Controller
+{
+    public function index()
+    {
+        if (!session()->has('user_id')) {
+            return redirect()->route('login');
+        }
+
+        $career = UserClub::with(['club', 'season'])
+            ->where('UserID', session('user_id'))
+            ->first();
+
+        if (!$career) {
+            return redirect()->route('start-game');
+        }
+
+        $upcomingMatches = MatchGame::with(['homeClub', 'awayClub'])
+            ->orderBy('MatchDate', 'asc')
+            ->limit(1)
+            ->get();
+
+        return view('dashboard', compact('career', 'upcomingMatches'));
+    }
+}

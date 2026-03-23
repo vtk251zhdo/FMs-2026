@@ -1,0 +1,60 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Season;
+use App\Models\Club;
+use App\Models\UserClub;
+use App\Models\Tournament;
+
+class GameController extends Controller
+{
+    public function showStartGame()
+    {
+        if (!session()->has('user_id')) {
+            return redirect()->route('login');
+        }
+
+        $activeCareer = UserClub::where('UserID', session('user_id'))
+            ->whereHas('season', fn($q) => $q->where('EndDate', '>', now()))
+            ->first();
+
+        if ($activeCareer) {
+            return redirect()->route('dashboard');
+        }
+
+        $clubs = Club::orderBy('ClubName')->get();
+
+        return view('start-game', compact('clubs'));
+    }
+
+    public function startGame(Request $request)
+    {
+        if (!session()->has('user_id')) {
+            return redirect()->route('login');
+        }
+
+        $request->validate([
+            'club_id' => 'required|exists:Clubs,ClubID'
+        ]);
+
+        $tournament = Tournament::firstOrFail();
+
+        $season = Season::create([
+            'TournamentID' => $tournament->TournamentID,
+            'StartDate' => now(),
+            'EndDate' => now()->addMonths(10),
+            'CurrentRound' => 1,
+            'TotalRounds' => 30
+        ]);
+
+        UserClub::create([
+            'UserID' => session('user_id'),
+            'ClubID' => $request->club_id,
+            'SeasonID' => $season->SeasonID
+        ]);
+
+        return redirect()->route('dashboard');
+    }
+}

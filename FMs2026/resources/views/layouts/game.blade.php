@@ -227,7 +227,7 @@
                 @if(session()->has('user_id'))
                     <nav class="nav flex-column">
 
-                        @if(session('role') === 'admin')
+                        @if(session('role') === 'Roles::ADMIN')
                             <a class="nav-link" href="{{ route('admin.dashboard') }}" style="background: rgba(255, 215, 0, 0.2); border-left-color: #ffd700;">
                                 <i class="bi bi-shield-lock"></i> 👑 {{ __('app.nav.admin_panel') ?? 'Адмін панель' }}
                             </a>

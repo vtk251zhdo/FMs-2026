@@ -2,84 +2,75 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Club;
-use App\Models\UserClub;
+use App\Services\ClubService;
 
 class ClubController extends Controller
 {
+    public function __construct(private ClubService $clubService)
+    {
+    }
 
     public function overview()
     {
-        $userClub = UserClub::with(['club', 'season'])->first();
+        $userClub = $this->clubService->getUserClub();
 
         if (!$userClub) {
             return redirect()->route('dashboard');
         }
 
-        $club = $userClub->club;
-
         return view('clubs.overview', [
-            'club' => $club,
+            'club' => $userClub->club,
             'userClub' => $userClub,
-            'players' => $club->players()->get(),
-            'coaches' => $club->coaches()->get(),
+            'players' => $this->clubService->getPlayers($userClub->club),
+            'coaches' => $this->clubService->getCoaches($userClub->club),
         ]);
     }
 
     public function players()
     {
-        $userClub = UserClub::with(['club', 'season'])->first();
+        $userClub = $this->clubService->getUserClub();
 
         if (!$userClub) {
             return redirect()->route('dashboard');
         }
 
-        $club = $userClub->club;
-        $players = $club->players()->orderBy('Rating', 'desc')->get();
-
         return view('clubs.players', [
-            'club' => $club,
-            'players' => $players,
+            'club' => $userClub->club,
+            'players' => $this->clubService->getPlayersOrderedByRating($userClub->club),
         ]);
     }
 
     public function playerDetail($id)
     {
-        $userClub = UserClub::with(['club', 'season'])->first();
+        $userClub = $this->clubService->getUserClub();
 
         if (!$userClub) {
             return redirect()->route('dashboard');
         }
 
-        $player = $userClub->club->players()->findOrFail($id);
-
         return view('clubs.player-detail', [
-            'player' => $player,
+            'player' => $this->clubService->getPlayerById($userClub->club, $id),
             'club' => $userClub->club,
         ]);
     }
 
     public function coaches()
     {
-        $userClub = UserClub::with(['club', 'season'])->first();
+        $userClub = $this->clubService->getUserClub();
 
         if (!$userClub) {
             return redirect()->route('dashboard');
         }
 
-        $club = $userClub->club;
-        $coaches = $club->coaches()->get();
-
         return view('clubs.coaches', [
-            'club' => $club,
-            'coaches' => $coaches,
+            'club' => $userClub->club,
+            'coaches' => $this->clubService->getCoaches($userClub->club),
         ]);
     }
 
     public function facilities()
     {
-        $userClub = UserClub::with(['club', 'season'])->first();
+        $userClub = $this->clubService->getUserClub();
 
         if (!$userClub) {
             return redirect()->route('dashboard');
